@@ -2,9 +2,10 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Users/nguyen.duc0912/Downloads/asg.cliche-110413.jar"/>
-	<classpathentry kind="lib" path="C:/Users/nguyen.duc0912/Downloads/okhttp-3.4.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/nguyen.duc0912/Downloads/java-json.jar"/>
-	<classpathentry kind="lib" path="C:/Users/nguyen.duc0912/Downloads/okio-1.11.0.jar"/>
+	<classpathentry kind="con" path="org.eclipse.buildship.core.gradleclasspathcontainer"/>
+	<classpathentry kind="lib" path="C:/Users/Scott Phong/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.4.1/c7c4f9e35c2fd5900da24f9872e3971801f08ce0/okhttp-3.4.1.jar" sourcepath="C:/Users/Scott Phong/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.4.1/70fca5cd856d0cc740e43affeb6f661204fdb2cc/okhttp-3.4.1-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Scott Phong/.gradle/caches/modules-2/files-2.1/org.json/json/20090211/c183aa3a2a6250293808bba12262c8920ce5a51c/json-20090211.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Scott Phong/.gradle/caches/modules-2/files-2.1/com.googlecode.clichemaven/cliche/110413/6b857d46798400f1f19f5fe7c4f6de4c5d16ede0/cliche-110413.jar" sourcepath="C:/Users/Scott Phong/.gradle/caches/modules-2/files-2.1/com.googlecode.clichemaven/cliche/110413/67c1ab55af786db052e565397e954e16bc604a2b/cliche-110413-sources.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Scott Phong/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.9.0/f824591a0016efbaeddb8300bee54832a1398cfa/okio-1.9.0.jar" sourcepath="C:/Users/Scott Phong/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.9.0/3aaaf83694e8c88e8c33c71b609f0ad506007a4a/okio-1.9.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

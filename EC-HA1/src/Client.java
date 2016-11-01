@@ -2,7 +2,6 @@ import java.io.IOException;
 
 import asg.cliche.*;
 import okhttp3.*;
-
 import org.json.*;
 
 public class Client {

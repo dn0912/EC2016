@@ -57,15 +57,9 @@ public class Client {
 
 	public static void main(String[] args) throws IOException{
 		
-		String endpoint;
-		
-		if(args.length >= 1){
-			endpoint = args[0];
-		}
-		else {
-			endpoint = "http://api-server.eu-gb.mybluemix.net/api/Calendars";
+		String endpoint = "http://api-server.eu-gb.mybluemix.net/api/Calendars";
 			
-		}
+		
 		ShellFactory.createConsoleShell("Type '?list' for all commands", "REST Client - Enterprise Computing", new Client(endpoint)).commandLoop();
 	}
 }

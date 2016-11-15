@@ -59,7 +59,7 @@ public class SqsLender {
 
 	public void processLoans() {
 		// TODO Prepare receive loan request message request.
-		ReceiveMessageRequest receiveLoanRequestMessageRequest = new ReceiveMessageRequest(responseQ);
+		ReceiveMessageRequest receiveLoanRequestMessageRequest = new ReceiveMessageRequest(requestQ).withAttributeNames("uuid");
 		while (true) {
 			// Prepare loan response message request.
 			SendMessageRequest loanResponseMessageRequest = new SendMessageRequest();
@@ -67,7 +67,6 @@ public class SqsLender {
 			// TODO Check request queue for loan requests.
 			List<Message> messages = sqs.receiveMessage(receiveLoanRequestMessageRequest).getMessages();
 			for (Message loanRequestMessage : messages) {
-				System.out.println(loanRequestMessage.toString());
 				StringTokenizer st = new StringTokenizer(
 						loanRequestMessage.getBody(), ",");
 				double salary = Double.valueOf(st.nextToken().trim())

@@ -19,6 +19,8 @@ import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CreateBucketRequest;
+import com.amazonaws.services.s3.model.GetBucketLocationRequest;
 import com.amazonaws.services.s3.model.GetObjectRequest;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
@@ -31,7 +33,7 @@ public class S3Exercise {
 	/**
 	 * Amazon S3 exercise: Fill the gaps.
 	 * 
-	 * @author marco peise
+	 * @author Duc Nguyen, Scott Nguyen
 	 */
 	public static void main(String[] args) {
 		/*
@@ -54,24 +56,63 @@ public class S3Exercise {
 		AmazonS3 s3 = new AmazonS3Client(credentials);
 
 		try {
+			
 			// TODO create a bucket with name "ise-tu-berlin-exercise2-",
 			// followed by your nickname (e.g., silversurfer)
+			
 			log.info("Creating a bucket (if it does not exist, yet)");
+			
+			String nickName = "nguyen.duc0912";
+			String bucketName = "ise-tu-berlin-exercise2-"+nickName;
+			
+			s3.setRegion(Region.getRegion(Regions.US_WEST_2));
+			
+			if(!(s3.doesBucketExist(bucketName))){
+				s3.createBucket(new CreateBucketRequest(bucketName));
+			}
+			
+			// Get location
+			String bucketLocation = s3.getBucketLocation(new GetBucketLocationRequest(bucketName));
+			log.info("Bucketlocation: "+bucketLocation);
+			
 			
 
 			// TODO Upload a text File object to your S3 bucket
 			// use the createSampleFile method to create the File object
+			
 			log.info("Uploading an object");
-
+			String key = "dn0912file";
+			try {
+				s3.putObject(new PutObjectRequest(bucketName, key, createSampleFile("test")));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 
 			// TODO Download the file from S3 and print it out using the
 			// displayTextInputStream method.
+			
 			log.info("Downloading an object");
-
+			S3Object s3object = s3.getObject(new GetObjectRequest(bucketName, key));
+			log.info("Content-Type: " + s3object.getObjectMetadata().getContentType());
+			try {
+				displayTextInputStream(s3object.getObjectContent());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
 			
 			//s3.deleteObject(bucketName, key);
 			//s3.deleteBucket(bucketName);
-
+			
+			log.info("Deleting an object");
+			s3.deleteObject(bucketName,key);
+			
+			
 		} catch (AmazonServiceException ase) {
 			log.error("Caught an AmazonServiceException, which means your request made it "
 							+ "to Amazon S3, but was rejected with an error response for some reason.");
@@ -88,7 +129,7 @@ public class S3Exercise {
 		}
 
 	}
-
+	
 	private static File createSampleFile(String nickname) throws IOException {
 		File file = File.createTempFile(nickname, ".txt");
 		file.deleteOnExit();

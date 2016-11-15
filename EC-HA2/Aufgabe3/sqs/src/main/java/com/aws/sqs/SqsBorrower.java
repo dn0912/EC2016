@@ -76,28 +76,35 @@ public class SqsBorrower {
 		sqs.sendMessage(loanRequestMessageRequest);
 
 		// TODO check response queue for matching responses
-		// ReceiveMessageRequest receiveMessageRequest = ...
+		ReceiveMessageRequest receiveMessageRequest = (new ReceiveMessageRequest(responseQ)).withMessageAttributeNames("uuid");
+		System.out.println(loanRequestMessageRequest.toString());
+		
 		boolean response = false;
 		System.out.println("Waiting for responses...");
 		while (!response) {
-			//List<Message> messages = sqs.receiveMessage(receiveMessageRequest)
-			//		.getMessages();
-			//for (Message lenderResponseMessage : messages) {
-			//	for (Entry<String, MessageAttributeValue> entry : lenderResponseMessage
-			//			.getMessageAttributes().entrySet()) {
-			//		if (entry.getKey().equals("uuid")
-			//				&& entry.getValue().getStringValue()
-			//						.equals(uuid.toString())) {
-			//			String messageRecieptHandle = lenderResponseMessage
-			//					.getReceiptHandle();
-			//			// Print out the response
+			//Vorgabe Start
+			List<Message> messages = sqs.receiveMessage(receiveMessageRequest)
+					.getMessages();
+			for (Message lenderResponseMessage : messages) {
+				for (Entry<String, MessageAttributeValue> entry : lenderResponseMessage
+						.getMessageAttributes().entrySet()) {
+					if (entry.getKey().equals("uuid")
+							&& entry.getValue().getStringValue()
+									.equals(uuid.toString())) {
+						String messageRecieptHandle = lenderResponseMessage
+								.getReceiptHandle();
+						// Print out the response
 			// TODO			System.out.println(...);
+						System.out.println(lenderResponseMessage.getBody());
+						
 						// delete the message from the queue
 			// TODO		...
-			//			response = true;
-			//		}
-			//	}
-			//}
+						sqs.deleteMessage(responseQ, messageRecieptHandle);
+						response = true;
+					}
+				}
+			}
+			//Vorgabe Ende
 			if (!response) {
 				try {
 					Thread.sleep(5000);

@@ -10,7 +10,7 @@ The CAP theorem says that it is impossible to ensure all three factors (Consiste
 
 It's only possible for maximum of 2 factors at the same time in a distributed system.
 
-The Domain Name System can be categorized in the two factors Consistency and Availability, but not in the partition tolerance. DNS has a very high availability and a high tolerance for failures of some individual DNS-server. But the consistency of the data is not guaranteed everytime. It is possible that changes of an DNS-entry can take days to have an effect on the DNS-hierarchy and then can be seen by the clients.
+The Domain Name System can be categorized in the two factors Consistency and Availability, but not in the partition tolerance. DNS has to have a very high availability for a large amount of requests that needs to be processed and a high failure tolerance if some individual DNS-server goes down. But the consistency of the data is not guaranteed everytime. It is possible that changes of an DNS-entry can take days to have an effect on the DNS-hierarchy and then can be seen by the clients.
 
 _______________________________________________ 
 b) Shortly describe two dimensions of data consistency from both a data-centric and a client-centric perspective.

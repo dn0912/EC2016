@@ -2,7 +2,15 @@ Task 1 – CAP Theorem (20+20 = 40%)
 
 a) Shortly explain the CAP theorem by example of the Domain Name System (DNS).
 
-The CAP theorem says that it is impossible to ensure all three factors (Consistency, availability and partition tolerance) at the same time in a distributed system. It's only possible for maximum of 2 factors at the same time in a distributed system.
+The CAP theorem says that it is impossible to ensure all three factors (Consistency, availability and partition tolerance) at the same time in a distributed system.
+
+    - Consistency: 
+    - Availability:
+    - Partition tolerance: 
+
+It's only possible for maximum of 2 factors at the same time in a distributed system.
+
+The Domain Name System can be categorized in the two factors Consistency and Availability, but not in the partition tolerance. DNS has a very high availability and a high tolerance for failures of some individual DNS-server. But the consistency of the data is not guaranteed everytime. It is possible that changes of an DNS-entry can take days to have an effect on the DNS-hierarchy and then can be seen by the clients.
 
 _______________________________________________ 
 b) Shortly describe two dimensions of data consistency from both a data-centric and a client-centric perspective.

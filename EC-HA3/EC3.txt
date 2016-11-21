@@ -39,27 +39,20 @@ _______________________________________________
 +++++++++++++++++++++++++++++++++++++++++++++++
 
 Task 2 – Dynamo (10+10+20+10+10 = 60%) 
-a) Which queries does Dynamo support and for which type of data storage is 
-Dynamo optimized?
+a) Which queries does Dynamo support and for which type of data storage is Dynamo optimized?
 
+DynamoDB supports GET/PUT operations using a user-defined primary key (Can either be a single-attribute partition key or a composite partition-sort key). Additionaly you can query on non-primary key attributes using Global Secondary Indexes and Local Secondary Indexes.
+
+Smaller data elements or file pointers are best saved in DynamoDB, because Amazon Dynamo DB stores structured data, indexed by primary key, and allows low latency read and write access to items rangin from 1 byte up to 400KB.
 _______________________________________________ 
-b) Pessimistic replication (as implemented in Dynamo, for example) is used to 
-offer high availability and low latency. True or false?
+b) Pessimistic replication (as implemented in Dynamo, for example) is used to offer high availability and low latency. True or false?
 
 _______________________________________________
 c) Dynamo uses vector clocks to determine the total order of write operations. 
-Given the vector clocks in the table below with conflicting versions on servers 
-A, B, and C. Please state whether or not the conflict can be reconciled automat-
-ically (yes/no) and how the vector clock must look like after a conflict resolu-
-tion.
+Given the vector clocks in the table below with conflicting versions on servers A, B, and C. Please state whether or not the conflict can be reconciled automatically (yes/no) and how the vector clock must look like after a conflict resolution.
 
 _______________________________________________
-d) Shortly explain the trade-off between consistency, read latency, and write 
-latency in Dynamo and how a Dynamo-based application could be tuned either 
-towards fast reads or towards fast writes using the (N,R,W) configuration. 
+d) Shortly explain the trade-off between consistency, read latency, and write latency in Dynamo and how a Dynamo-based application could be tuned either towards fast reads or towards fast writes using the (N,R,W) configuration. 
 
 _______________________________________________
-e) What is the minimum cluster size, i.e., number of servers, of a Dynamo con-
-figuration (N=9, R=1, W=9) and why? For this minimum cluster size: how many 
-data records are stored on each node after 1 million data records have been 
-inserted into the Dynamo cluster by a client program? 
+e) What is the minimum cluster size, i.e., number of servers, of a Dynamo configuration (N=9, R=1, W=9) and why? For this minimum cluster size: how many data records are stored on each node after 1 million data records have been inserted into the Dynamo cluster by a client program? 

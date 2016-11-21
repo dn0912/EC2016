@@ -15,7 +15,40 @@ The Domain Name System can be categorized in the two factors Consistency and Ava
 _______________________________________________ 
 b) Shortly describe two dimensions of data consistency from both a data-centric and a client-centric perspective.
 
+Data consistency is the correctness of of saved data in databases.
 
+Data-centric: Describes the guarantees of consistency from the intern point of view, the storgae provider perspective.
+
+    Monotic Read consistency:
+
+    Monotic Write Consistency:
+
+    Read Your Writes Consistency:
+
+    Write Follows Reads Consistency:
+
+(Nach Folien)
+    Two dimensions:
+        Ordering describes
+            - The execution order of requests on different replicas
+        Staleness describes
+            - The difference in time between the commit of an update (if dirty reads are possible this changes to the start of an update) and reaching the last replica
+
+
+Client-centric: Describes the data consistency from the view of the client/application.
+
+    Causal Consistency:
+
+    Sequential Consistency:
+
+    Linearizability:
+
+(Nach Folien)
+    Two dimensions:
+        Ordering describes
+            - The ordering of requests visible to clients
+        Staleness describes
+            - The difference in time between the commit of an update (of dirty reads are possible this changes to the start of an update) and the last point in time when the previous value was still returned
 
 _______________________________________________
 

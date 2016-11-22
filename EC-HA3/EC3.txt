@@ -42,7 +42,6 @@ Task 2 – Dynamo (10+10+20+10+10 = 60%)
 a) Which queries does Dynamo support and for which type of data storage is Dynamo optimized?
 
 DynamoDB supports GET/PUT operations using a user-defined primary key (Can either be a single-attribute partition key or a composite partition-sort key). Additionaly you can query on non-primary key attributes using Global Secondary Indexes and Local Secondary Indexes.
-
 Smaller data elements or file pointers are best saved in DynamoDB, because Amazon Dynamo DB stores structured data, indexed by primary key, and allows low latency read and write access to items rangin from 1 byte up to 400KB.
 _______________________________________________ 
 b) Pessimistic replication (as implemented in Dynamo, for example) is used to offer high availability and low latency. True or false?
@@ -59,38 +58,7 @@ If W+R > N, then the write set and the read set always overlap and one can guara
 
 In R=1 and N=W we optimize for the read case, and in W=1 and R=N we optimize for a very fast write.
 
-
-The main advantage of Dynamo is that its client applications can
-tune the values of N, R and W to achieve their desired levels of
-performance, availability and durability. For instance, the value of
-N determines the durability of each object. A typical value of N
-used by Dynamo’s users is 3.
-The values of W and R impact object availability, durability and
-consistency. For instance, if W is set to 1, then the system will
-never reject a write request as long as there is at least one node in
-the system that can successfully process a write request. However,
-low values of W and R can increase the risk of inconsistency as
-write requests are deemed successful and returned to the clients
-even if they are not processed by a majority of the replicas. This
-also introduces a vulnerability window for durability when a write
-request is successfully returned to the client even though it has
-been persisted at only a small number of nodes. 
-
-The common (N,R,W) configuration used by several instances of
-Dynamo is (3,2,2). These values are chosen to meet the necessary
-levels of performance, durability, consistency, and availability
-SLAs.
-
-In distributed-storage systems that need to provide high performance and high availability, the number of replicas is in general higher than two. Systems that focus solely on fault tolerance often use N=3 (with W=2 and R=2 configurations). Systems that need to serve very high read loads often replicate their data beyond what is required for fault tolerance; N can be tens or even hundreds of nodes, with R configured to 1 such that a single read will return a result. Systems that are concerned with consistency are set to W=N for updates, which may decrease the probability of the write succeeding. A common configuration for these systems that are concerned about fault tolerance but not consistency is to run with W=1 to get minimal durability of the update and then rely on a lazy (epidemic) technique to update the other replicas.
-
 _______________________________________________
 e) What is the minimum cluster size, i.e., number of servers, of a Dynamo configuration (N=9, R=1, W=9) and why? For this minimum cluster size: how many data records are stored on each node after 1 million data records have been inserted into the Dynamo cluster by a client program? 
 
-With the configuration (N=9, R=1, W=9) the minimum cluster size is 9.
-To maintain consistency among its replicas, Dynamo uses a
-consistency protocol similar to those used in quorum systems.
-This protocol has two key configurable values: R and W. R is the
-minimum number of nodes that must participate in a successful
-read operation. W is the minimum number of nodes that must
-participate in a successful write operation. Setting R and W such
-that R + W > N yields a quorum-like system. 
+With the configuration (N=9, R=1, W=9) the minimum cluster size is 9. To maintain consistency among its replicas, Dynamo uses a consistency protocol similar to those used in quorum systems. This protocol has two key configurable values: R and W. R is the minimum number of nodes that must participate in a successful read operation. W is the minimum number of nodes that must participate in a successful write operation. Setting R and W such that R + W > N yields a quorum-like system.

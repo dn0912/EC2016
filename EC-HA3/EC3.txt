@@ -4,9 +4,9 @@ a) Shortly explain the CAP theorem by example of the Domain Name System (DNS).
 
 The CAP theorem says that it is impossible to ensure all three factors (Consistency, availability and partition tolerance) at the same time in a distributed system.
 
-    - Consistency: 
-    - Availability:
-    - Partition tolerance: 
+    - Consistency: In distributed systems all replicas of the manipulated data has to be up to date.
+    - Availability: Acceptable response (no error or timeout)
+    - Partition tolerance: the failure tolerance of server networks, even if messages get lost or partitions of the network don't work
 
 It's only possible for maximum of 2 factors at the same time in a distributed system.
 
@@ -62,3 +62,5 @@ _______________________________________________
 e) What is the minimum cluster size, i.e., number of servers, of a Dynamo configuration (N=9, R=1, W=9) and why? For this minimum cluster size: how many data records are stored on each node after 1 million data records have been inserted into the Dynamo cluster by a client program? 
 
 With the configuration (N=9, R=1, W=9) the minimum cluster size is 9. To maintain consistency among its replicas, Dynamo uses a consistency protocol similar to those used in quorum systems. This protocol has two key configurable values: R and W. R is the minimum number of nodes that must participate in a successful read operation. W is the minimum number of nodes that must participate in a successful write operation. Setting R and W such that R + W > N yields a quorum-like system.
+
+After 1 million data records there are 111112

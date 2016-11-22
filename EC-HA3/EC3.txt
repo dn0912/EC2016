@@ -10,7 +10,7 @@ The CAP theorem says that it is impossible to ensure all three factors (Consiste
 
 It's only possible for maximum of 2 factors at the same time in a distributed system.
 
-The Domain Name System can be categorized in the two factors Consistency and Availability, but not in the partition tolerance. DNS has to have a very high availability for a large amount of requests that needs to be processed and a high failure tolerance if some individual DNS-server goes down. But the consistency of the data is not guaranteed everytime. It is possible that changes of an DNS-entry can take days to have an effect on the DNS-hierarchy and then can be seen by the clients.
+The Domain Name System can be categorized in the two factors Consistency and Availability, but not in the partition tolerance. DNS has to have a very high availability for a large amount of requests that needs to be processed and a high failure tolerance if some individual DNS-server goes down. But the consistency of the data is not guaranteed everytime. It is possible that changes of an DNS-entry can take days to have an effect on the DNS-hierarchy and then it can be seen by the clients.
 
 _______________________________________________ 
 b) Shortly describe two dimensions of data consistency from both a data-centric and a client-centric perspective.
@@ -47,6 +47,34 @@ Smaller data elements or file pointers are best saved in DynamoDB, because Amazo
 _______________________________________________ 
 b) Pessimistic replication (as implemented in Dynamo, for example) is used to offer high availability and low latency. True or false?
 
+Pessimistic replication techniques perform well in local-area networking environments. Given the
+continuing progress in Internet technologies, it is tempting to apply these techniques to wide-area
+data distribution. Good performance and availability cannot be expected, however, for three main
+reasons:
+(1) Wide-area networks continue to be slow and unreliable. The Internet’s end-to-end communication
+latency and availability have not improved in recent years [Chandra et al. 2001; Zhang
+et al. 2000]. There are many mobile computing devices and devices behind firewalls with only
+intermittent connectivity to the Internet.
+Pessimistic replication algorithms work poorly in such environments. For example, a primarycopy
+algorithm demands that a site’s failure be accurately detected (and distinguished from, say,
+link failure or node thrashing) so that it can reliably re-elect another primary when one fails.
+This is theoretically impossible [Fischer et al. 1985; Chandra and Toueg 1996; Chandra et al.
+1996], and becomes probabilistically possible only by over-provisioning hardware end-to-end.
+
+(2) Pessimistic algorithms face a trade-off regarding availability: while increasing the number of
+replicas improves read availability, it decreases write availability, because these algorithms coordinate
+replicas in a lock-step manner to update their contents.Thus, they have difficulty supporting
+services that deploy many replicas and experience frequent updates. Unfortunately, many
+Internet and mobile services fall in this category; for instance Usenet [Spencer and Lawrence
+1998; Lidl et al. 1994], and mobile file and database systems [Walker et al. 1983; Kistler and
+Satyanarayanan 1992; Moore 1995; Ratner 1998].
+
+(3) Some human activites inherently demand optimistic data sharing. For example, in cooperative
+engineering or program development, users work concurrently and in relative isolation from one
+another [Cederqvist et al. 2001; Ferreira et al. 2000]. It is better to allow concurrent updates
+and repair occasional conflicts after they happen than locking data during editing. Optimistic
+replication becomes all the more valuable when such working style is combined with network
+latencies or time-zone differences.
 _______________________________________________
 c) Dynamo uses vector clocks to determine the total order of write operations. 
 Given the vector clocks in the table below with conflicting versions on servers A, B, and C. Please state whether or not the conflict can be reconciled automatically (yes/no) and how the vector clock must look like after a conflict resolution.
@@ -54,5 +82,79 @@ Given the vector clocks in the table below with conflicting versions on servers 
 _______________________________________________
 d) Shortly explain the trade-off between consistency, read latency, and write latency in Dynamo and how a Dynamo-based application could be tuned either towards fast reads or towards fast writes using the (N,R,W) configuration. 
 
+High performance read engine: While Dynamo is built to be
+an “always writeable” data store, a few services are tuning its
+quorum characteristics and using it as a high performance
+read engine. Typically, these services have a high read
+request rate and only a small number of updates. In this
+configuration, typically R is set to be 1 and W to be N. For
+these services, Dynamo provides the ability to partition and
+replicate their data across multiple nodes thereby offering
+incremental scalability. Some of these instances function as
+the authoritative persistence cache for data stored in more
+heavy weight backing stores. Services that maintain product
+catalog and promotional items fit in this category. 
+
+The main advantage of Dynamo is that its client applications can
+tune the values of N, R and W to achieve their desired levels of
+performance, availability and durability. For instance, the value of
+N determines the durability of each object. A typical value of N
+used by Dynamo’s users is 3.
+The values of W and R impact object availability, durability and
+consistency. For instance, if W is set to 1, then the system will
+never reject a write request as long as there is at least one node in
+the system that can successfully process a write request. However,
+low values of W and R can increase the risk of inconsistency as
+write requests are deemed successful and returned to the clients
+even if they are not processed by a majority of the replicas. This
+also introduces a vulnerability window for durability when a write
+request is successfully returned to the client even though it has
+been persisted at only a small number of nodes. 
+
+Traditional wisdom holds that durability and availability go handin-hand.
+However, this is not necessarily true here. For instance,
+the vulnerability window for durability can be decreased by
+increasing W. This may increase the probability of rejecting
+requests (thereby decreasing availability) because more storage
+hosts need to be alive to process a write request.
+The common (N,R,W) configuration used by several instances of
+Dynamo is (3,2,2). These values are chosen to meet the necessary
+levels of performance, durability, consistency, and availability
+SLAs.
+
+
+
+Server-side Consistency
+On the server side we need to take a deeper look at how updates flow through the system to understand what drives the different modes that the developer who uses the system can experience. Let's establish a few definitions before getting started:
+
+N = the number of nodes that store replicas of the data
+
+W = the number of replicas that need to acknowledge the receipt of the update before the update completes
+
+R = the number of replicas that are contacted when a data object is accessed through a read operation
+
+If W+R > N, then the write set and the read set always overlap and one can guarantee strong consistency. In the primary-backup RDBMS scenario, which implements synchronous replication, N=2, W=2, and R=1. No matter from which replica the client reads, it will always get a consistent answer. In asynchronous replication with reading from the backup enabled, N=2, W=1, and R=1. In this case R+W=N, and consistency cannot be guaranteed.
+
+The problems with these configurations, which are basic quorum protocols, is that when the system cannot write to W nodes because of failures, the write operation has to fail, marking the unavailability of the system. With N=3 and W=3 and only two nodes available, the system will have to fail the write.
+
+In distributed-storage systems that need to provide high performance and high availability, the number of replicas is in general higher than two. Systems that focus solely on fault tolerance often use N=3 (with W=2 and R=2 configurations). Systems that need to serve very high read loads often replicate their data beyond what is required for fault tolerance; N can be tens or even hundreds of nodes, with R configured to 1 such that a single read will return a result. Systems that are concerned with consistency are set to W=N for updates, which may decrease the probability of the write succeeding. A common configuration for these systems that are concerned about fault tolerance but not consistency is to run with W=1 to get minimal durability of the update and then rely on a lazy (epidemic) technique to update the other replicas.
+
+How to configure N, W, and R depends on what the common case is and which performance path needs to be optimized. In R=1 and N=W we optimize for the read case, and in W=1 and R=N we optimize for a very fast write. Of course in the latter case, durability is not guaranteed in the presence of failures, and if W < (N+1)/2, there is the possibility of conflicting writes when the write sets do not overlap.
+
+Weak/eventual consistency arises when W+R <= N, meaning that there is a possibility that the read and write set will not overlap. If this is a deliberate configuration and not based on a failure case, then it hardly makes sense to set R to anything but 1. This happens in two very common cases: the first is the massive replication for read scaling mentioned earlier; the second is where data access is more complicated. In a simple key-value model it is easy to compare versions to determine the latest value written to the system, but in systems that return sets of objects it is more difficult to determine what the correct latest set should be. In most of these systems where the write set is smaller than the replica set, a mechanism is in place that applies the updates in a lazy manner to the remaining nodes in the replica's set. The period until all replicas have been updated is the inconsistency window discussed before. If W+R <= N, then the system is vulnerable to reading from nodes that have not yet received the updates.
+
+
+
 _______________________________________________
 e) What is the minimum cluster size, i.e., number of servers, of a Dynamo configuration (N=9, R=1, W=9) and why? For this minimum cluster size: how many data records are stored on each node after 1 million data records have been inserted into the Dynamo cluster by a client program? 
+
+To maintain consistency among its replicas, Dynamo uses a
+consistency protocol similar to those used in quorum systems.
+This protocol has two key configurable values: R and W. R is the
+minimum number of nodes that must participate in a successful
+read operation. W is the minimum number of nodes that must
+participate in a successful write operation. Setting R and W such
+that R + W > N yields a quorum-like system. In this model, the
+latency of a get (or put) operation is dictated by the slowest of the
+R (or W) replicas. For this reason, R and W are usually
+configured to be less than N, to provide better latency. 

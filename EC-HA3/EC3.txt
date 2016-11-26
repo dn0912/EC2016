@@ -63,4 +63,4 @@ e) What is the minimum cluster size, i.e., number of servers, of a Dynamo config
 
 With the configuration (N=9, R=1, W=9) the minimum cluster size is 9. To maintain consistency among its replicas, Dynamo uses a consistency protocol similar to those used in quorum systems. This protocol has two key configurable values: R and W. R is the minimum number of nodes that must participate in a successful read operation. W is the minimum number of nodes that must participate in a successful write operation. Setting R and W such that R + W > N yields a quorum-like system.
 
-After 1 million data records there are 111112
+For this minimum cluster size there are about 111112 data records in each node, inserted by a client program.

@@ -6,7 +6,11 @@ a) Explain with your own words how distributed storage engines (like Dynamo) is 
   - all read and write operations are performed on the frist N healthy nodes from the preference list, which may not always be the first N nodes encountered while walking the consistens hashing ring
   - with a example DynamoDB configuration of N=3 and a temporary failure occurs or a write operation is happening on node A, a replica that would normally have lived in A will now be sent to node D. The replica will have a hint in its metadata with a suggestion to the node which was intended - A. The hints are kept in a separate local databse that is scanned periodically. If A is available again, D will attempt to deliver the replica to A. After the transfer, D may delete the object from its local store
 
-b) Give a reasons why one should use distributed caching and explain it in a use case.  
+b) Give a reasons why one should use distributed caching and explain it in a use case.
+
+  - distributed cache can be bigger in cache size, it combines resources from several servers
+  - distributed cache can reduce the cost of lookups across all the servers in the cluster, because distributed cache provides an architecture where all the hosts are sharing the load of answering reads requests
+  - distributed cache limits the interruption to typical operations during optimization and maintenance activities, so performance-enhancing tools dont break continous operations and performance tanking is avoided
 
 
 c) Name three advantages of distributed caches and explain them in one sentence. 

@@ -1,7 +1,10 @@
 Task 1 – Misc. (10+10+10 = 30%) 
-a) Explain with your own words how distributed storage engines (like Dynamo) is handling 
-temporary failures and give an example.  
+a) Explain with your own words how distributed storage engines (like Dynamo) is handling temporary failures and give an example.  
 
+  - Technique: "Sloppy Quorum" and hinted handoff
+  - these techniques provide high availability and durability guarantee when some of the replicas are not available
+  - all read and write operations are performed on the frist N healthy nodes from the preference list, which may not always be the first N nodes encountered while walking the consistens hashing ring
+  - with a example DynamoDB configuration of N=3 and a temporary failure occurs or a write operation is happening on node A, a replica that would normally have lived in A will now be sent to node D. The replica will have a hint in its metadata with a suggestion to the node which was intended - A. The hints are kept in a separate local databse that is scanned periodically. If A is available again, D will attempt to deliver the replica to A. After the transfer, D may delete the object from its local store
 
 b) Give a reasons why one should use distributed caching and explain it in a use case.  
 

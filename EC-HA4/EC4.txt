@@ -8,13 +8,15 @@ a) Explain with your own words how distributed storage engines (like Dynamo) is 
 
 b) Give a reasons why one should use distributed caching and explain it in a use case.
 
-  - distributed cache can be bigger in cache size, it combines resources from several servers
-  - distributed cache can reduce the cost of lookups across all the servers in the cluster, because distributed cache provides an architecture where all the hosts are sharing the load of answering reads requests
-  - distributed cache limits the interruption to typical operations during optimization and maintenance activities, so performance-enhancing tools dont break continous operations and performance tanking is avoided
+  - For cases in which the number of objects that can be or should be cached is unpredicatble and large, and consistency of reads is a must-have
 
+  - for example - online catalogues: end users are likely to access the same data a lot of times during the course of the day. Fast access to item prices and other information are crucial for the satisfaction of the user experience for this web application. Ensuring good performance through making that data availabe in a coherence and distributed cache is the solution.
 
 c) Name three advantages of distributed caches and explain them in one sentence. 
 
+  - distributed cache can be bigger in cache size, it combines resources from several servers
+  - distributed cache can reduce the cost of lookups across all the servers in the cluster, because distributed cache provides an architecture where all the hosts are sharing the load of answering reads requests
+  - distributed cache limits the interruption to typical operations during optimization and maintenance activities, so performance-enhancing tools dont break continous operations and performance tanking is avoided
 
 Task 2 – GFS (20+10+10 = 40%) 
 a) Which operations are supported by GFS? For which types of queries is GFS optimized?  

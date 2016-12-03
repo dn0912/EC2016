@@ -1,0 +1,69 @@
+Task 1 – Cassandra Query Language (5+10+5+5+5+10+10 = 50%) 
+a) Keyspaces 
+Does the following CQL3 statement create a new keyspace that places one replica in each of two data centers? 
+cqlsh> CREATE KEYSPACE <ksname> 
+  WITH REPLICATION = {'class':'NetworkTopologyStrategy','DC1':1,'DC2':1}; 
+
+Yes
+
+______
+b) Compound primary keys 
+Which statement creates a table "messages" in the keyspace "msgplatform" that is partitioned by "participant_id" across multiple servers and locally clustered by "posted_on" date and “posted_location” string?
+
+CREATE TABLE msgplatform.message(
+    participant_id int,
+    posted_on timestamp,
+    posted_location text,
+    PRIMARY KEY (participant_id,(posted_on, posted_location))
+)
+______
+c) Add a collection to a table 
+You want to alter an existing "customers" table schema with an additional column that can contain sets of "interests" (text strings). After you have altered the table, a query like this should work: 
+cqlsh:msgplatform> UPDATE customers SET interests = interests + {'climbing','baking'} WHERE id = 202;
+
+Please complete the following uncomplete statement using correct SQL syntax: 
+
+cqlsh:msgplatform> ALTER TABLE customers ADD interests set<text>;
+
+______
+d) TTL 
+Is it true or false? The following statement inserts an expiring column named "pw_reset_token" with value "fgh-lmn-456" into the "customers" table. The column "pw_reset_token" will be deleted automatically after 6000 seconds but the customer row with id 315 and name "karlmann" will still be present in the table after 6000 seconds.
+cqlsh:msgplatform> INSERT INTO customers (id, name, 
+  pw_reset_token)         
+  VALUES (315, 'karlmann', 'fgh-lmn-456') 
+  USING TTL 12000;
+
+False
+
+______
+e) Counter columns 
+You have created a table named "referendum" with two counter columns like this: 
+cqlsh:msgplatform> CREATE TABLE referendum ( 
+  participant_id int, 
+  msg_created_time timeuuid, 
+  msg_created_location string, 
+  voteinfavor counter, 
+  voteoppose counter, 
+  PRIMARY KEY (participant_id, msg_created_time, ) 
+  ); 
+Complete the following query that increments the number of in favor votes for a referendum which are created in "germany", between the first and second of January 2016 (midnight-midnight) and from the participant with the number "519":
+
+cqlsh:msgplatform> UPDATE referendum SET voteinfavor = voteinfavor + 1 WHERE participant_id = 519
+AND msg_created_time >= maxTimeuuid(2016-01-01 00:00:00+0000)
+AND msg_created_time <= minTimeuuid(2016-01-02 00:00:00+0000)
+AND msg_created_location = 'germany';
+
+_____
+f) Lightweight transactions with Compare-and-Set (CAS) 
+Write two CQL queries that implement the following feature: 
+1. A user named Catarina (user id: “689”) wants to reset her password by creating an expiring token ("pw_reset_token") column in her user row in the “customers” table. 
+2. She gets a message with a link to a site where to reset her password. On that site she can enter a new password only if the expiring token (encoded as parameter into the link in her message) matches the expiring token in her user row and if the token has not expired, yet. 
+
+UPDATE customers USING TTL 1800
+SET pw_reset_token = 'pw_token'
+WHERE userid = 689
+
+UPDATE customers
+SET password = 'newpassword'
+WHERE userid = 689
+IF pw_reset_token = 'some-generated-reset-token'

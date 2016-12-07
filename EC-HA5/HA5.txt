@@ -67,3 +67,8 @@ UPDATE customers
 SET password = 'newpassword'
 WHERE userid = 689
 IF pw_reset_token = 'some-generated-reset-token'
+
+g)  True  or  false? 
+Only one node in a P2P data cluster (such as a Cassandra cluster) maintains a sliding window of inter-arrival times of Gossip messages.
+
+False

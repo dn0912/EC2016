@@ -1,0 +1,80 @@
+Task 1 – Transactional Web Benchmarks (20%) 
+Name four relevant reasons why transactional web benchmarks are not optimal for benchmarking cloud database systems or cloud database services. 
+
+___
+
+Task 2 – Performance Benchmarking with YCSB (12+12+12+12+9+8+15=80%) 
+Install YCSB (version 0.11.0) and the YCSB Cassandra & MongoDB bindings and perform 
+the following tasks against a local Cassandra server (1-node cluster) and a local Mon-
+goDB server. For Cassandra only: 
+•  Load the Cassandra table “usertable” in keyspace “ycsb” with 1 million records of 
+default record size (i.e., 10 fields à 100 Bytes = 1 KB). 
+If you run the performance benchmark, please drop the keyspace “ycsb” and recreate it 
+before you enter the results below (i.e., start with a fresh keyspace).
+
+For Cassandra & MongoDB: 
+•  Run a “transaction” performance benchmark with workload “workloada” (50% 
+read and 50% write operations) with 1 million operations. 
+
+a) What are your results of the “transaction” performance benchmark for Cassandra? 
+
+YCSB Metric                          Results 
+Average READ Latency [µs]   
+Average UPDATE Latency [µs]   
+READ MinLatency [µs]   
+Throughput [ops/sec]
+
+b) What are your results of the “transaction” performance benchmark for MongoDB? 
+
+YCSB Metric                         Results 
+Average READ Latency [µs]   
+Average UPDATE Latency [µs]   
+READ MinLatency [µs]   
+Throughput [ops/sec]
+
+c) Use Cassandra’s nodetool utility to collect the following metrics after your benchmark 
+run:
+
+Cassandra Metric                   Results 
+Local read count   
+Local read latency   
+Local write count   
+Local write latency   
+
+___
+
+d) Explain the read count and write count numbers that you collected in c). Do the num-
+bers make sense? 
+
+
+___
+
+e) What equivalent command in MongoDB to Cassandra’s nodetool utility could you use 
+to collect the following metrics after your benchmark run?  
+ 
+Write down the complete command. Add the metrics to the table.
+
+YCSB Metric                      Results 
+Average Object Size   
+Number of all Documents in DB   
+
+___
+
+f) When switching your MongoDB engine from WiredTiger to MMAPv1 Engine and run your 
+benchmark again, how many ”Insert Calls” is YCSB performing?  
+Use the same tool as in 2 e). Does the number for “Insert Calls” make sense? Explain 
+why.
+
+YCSB Metric                     Results 
+Insert Calls   
+
+___
+
+g) What are your results of the “transaction” performance benchmark for MongoDB with 
+MMAPv1 activated? Explain the difference between “MMAPv1” and “WiredTiger” results. 
+ 
+YCSB Metric                     Results 
+Average READ Latency [µs]   
+Average UPDATE Latency [µs]   
+READ MinLatency [µs]   
+Throughput [ops/sec]   

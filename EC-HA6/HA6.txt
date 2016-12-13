@@ -4,17 +4,12 @@ Name four relevant reasons why transactional web benchmarks are not optimal for 
 ___
 
 Task 2 – Performance Benchmarking with YCSB (12+12+12+12+9+8+15=80%) 
-Install YCSB (version 0.11.0) and the YCSB Cassandra & MongoDB bindings and perform 
-the following tasks against a local Cassandra server (1-node cluster) and a local Mon-
-goDB server. For Cassandra only: 
-•  Load the Cassandra table “usertable” in keyspace “ycsb” with 1 million records of 
-default record size (i.e., 10 fields à 100 Bytes = 1 KB). 
-If you run the performance benchmark, please drop the keyspace “ycsb” and recreate it 
-before you enter the results below (i.e., start with a fresh keyspace).
+Install YCSB (version 0.11.0) and the YCSB Cassandra & MongoDB bindings and perform the following tasks against a local Cassandra server (1-node cluster) and a local MongoDB server. For Cassandra only: 
+•  Load the Cassandra table “usertable” in keyspace “ycsb” with 1 million records of default record size (i.e., 10 fields à 100 Bytes = 1 KB). 
+If you run the performance benchmark, please drop the keyspace “ycsb” and recreate it before you enter the results below (i.e., start with a fresh keyspace).
 
 For Cassandra & MongoDB: 
-•  Run a “transaction” performance benchmark with workload “workloada” (50% 
-read and 50% write operations) with 1 million operations. 
+•  Run a “transaction” performance benchmark with workload “workloada” (50% read and 50% write operations) with 1 million operations. 
 
 a) What are your results of the “transaction” performance benchmark for Cassandra? 
 
@@ -65,9 +60,29 @@ benchmark again, how many ”Insert Calls” is YCSB performing?
 Use the same tool as in 2 e). Does the number for “Insert Calls” make sense? Explain 
 why.
 
-YCSB Metric                     Results 
-Insert Calls   
 
+YCSB Metric                     Results 
+Insert Calls                    1000
+
+The number makes sense, because this is the amount of objects in the database.
+
+Commands for changing from WiredTiger to MMAPv1:
+1. backup database:
+mongodump --out /srv/backup/mongodb
+
+2. stop mongodb service:
+service mongodb stop
+
+3. update mongodb.conf:
+
+4. start mongodb service:
+service mongodb start
+
+5. restore database from backup:
+mongorestore /srv/backup/mongodb
+
+6. check storage engine:
+db.serverStatus().storageEngine
 ___
 
 g) What are your results of the “transaction” performance benchmark for MongoDB with 

@@ -1,0 +1,14 @@
+Task 1 – Web Benchmarks (20%) 
+Name four relevant reasons why benchmarks such as TPC, OLTPBench, YCSB or YCSB++ are not optimal for benchmarking cloud database systems or cloud database services.
+
+TPC or OLTPBench have strict functional and non-functional requirements on supported database systems and services which today are only fulfilled by RDBMS. --> cannot be used to study NoSQL systems and often only specification and not actually implemented.
+
+YCSB and YCSB++ are essentially micro-benchmarks --> usefull for understanding how tiny changes in workloads affect system quality or for testing isolated database features. Not good for use cases such as selecting or optimizing the configuration of a database system, since micro-benchmarks rarely mimick application workloads realistically.
+
+More criterias, which are disadvantages for benchmarking cloud database systems/cloud database services:
+- lacking in the aspects like extensibility in terms of workloads
+- multiquality measurements
+- (geo-) distribution support of the benchmark out of the box
+- fine-grained resulst collection
+- ease-of-use
+
